@@ -33,29 +33,45 @@ public class UserController {
 
 	@GetMapping("/id/{id}")
 	public ResponseEntity<User> findById(@PathVariable Long id) {
-		return ResponseEntity.of(userRepository.findById(id));
+		try {
+			return ResponseEntity.of(userRepository.findById(id));
+		} catch (Exception e) {
+			log.error("Exception found.", e);
+			throw e;
+		}
 	}
 	
 	@GetMapping("/{username}")
 	public ResponseEntity<User> findByUserName(@PathVariable String username) {
-		User user = userRepository.findByUsername(username);
-		return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(user);
+		try {
+			User user = userRepository.findByUsername(username);
+			return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(user);
+		} catch (Exception e) {
+			log.error("Exception found.", e);
+			throw e;
+		}
 	}
 	
 	@PostMapping("/create")
 	public ResponseEntity<User> createUser(@RequestBody CreateUserRequest createUserRequest) {
-		User user = new User();
-		user.setUsername(createUserRequest.getUsername());
-		Cart cart = new Cart();
-		cartRepository.save(cart);
-		user.setCart(cart);
-		if(createUserRequest.getPassword().length()<7 ||
-				!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())){
-			log.error("Error - Either length is less than 7 or pass and conf pass do not match. Unable to create ", createUserRequest.getUsername());
-			return ResponseEntity.badRequest().build();
+		try {
+			User user = new User();
+			user.setUsername(createUserRequest.getUsername());
+			Cart cart = new Cart();
+			cartRepository.save(cart);
+			user.setCart(cart);
+			if(createUserRequest.getPassword().length()<7 ||
+					!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())){
+				log.error("Error - Either length is less than 7 or pass and conf pass do not match. Unable to create ", createUserRequest.getUsername());
+				return ResponseEntity.badRequest().build();
+			}
+			user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
+			userRepository.save(user);
+			log.info("User {} created successfully", createUserRequest.getUsername());
+			return ResponseEntity.ok(user);
+		} catch (Exception e) {
+			log.error("Exception found.", e);
+			throw e;
 		}
-		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
-		userRepository.save(user);
-		return ResponseEntity.ok(user);
 	}
 }
