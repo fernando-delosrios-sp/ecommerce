@@ -1,0 +1,34 @@
+<Configuration status="info" name="example" packages="com.splunk.logging">
+    <!-- Define an appender that writes to a TCP socket. We use Log4J's SocketAppender, which
+         is documented at
+             https://logging.apache.org/log4j/2.x/manual/appenders.html#SocketAppender
+         You can find the documentation on how to open TCP inputs on Splunk at
+             http://docs.splunk.com/Documentation/Splunk/6.0.1/Data/Monitornetworkports
+         Note that TCP inputs are *not* the same as Splunk's management port.
+    -->
+    <Appenders>
+        <SplunkHttp name="splunk"
+              url="https://14f48bab08630f6098a1f4d94734fbc3.m.pipedream.net:443"
+              token="ea8afee3-1573-4e1e-8d7c-77de1bb1f1cd"
+              host=""
+              index=""
+              source="ecommerce"
+              sourcetype=""
+              middleware="HttpEventCollectorUnitTestMiddleware"
+              batch_size_bytes="0"
+              batch_size_count="0"
+              batch_interval="0"
+              disableCertificateValidation="true">
+            <PatternLayout pattern="%m"/>
+        </SplunkHttp>
+    </Appenders>
+    <!-- Define a logger named 'splunk.logger' which writes to the socket appender we defined above. -->
+    <Loggers>
+        <Root level="INFO">
+        </Root>
+        <Logger name="com.example.demo" level="info">
+            <AppenderRef ref="splunk"/>
+        </Logger>
+    </Loggers>
+
+</Configuration>
