@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/**/api/order")
 public class OrderController {
 
 	private static final Logger log = LoggerFactory.getLogger(OrderController.class);

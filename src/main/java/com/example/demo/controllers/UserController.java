@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Transactional
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/**/api/user")
 public class UserController {
 
 	private static final Logger log = LoggerFactory.getLogger(UserController.class);
