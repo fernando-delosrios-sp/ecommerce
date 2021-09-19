@@ -17,7 +17,7 @@ import com.example.demo.model.persistence.repositories.ItemRepository;
 
 @Transactional
 @RestController
-@RequestMapping("/**/api/item")
+@RequestMapping("/api/item")
 public class ItemController {
 	private static final Logger log = LoggerFactory.getLogger(ItemController.class);
 

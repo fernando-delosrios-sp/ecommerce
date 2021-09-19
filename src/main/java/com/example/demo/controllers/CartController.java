@@ -24,7 +24,7 @@ import com.example.demo.model.requests.ModifyCartRequest;
 
 @Transactional
 @RestController
-@RequestMapping("/**/api/cart")
+@RequestMapping("/api/cart")
 public class CartController {
 	private static final Logger log = LoggerFactory.getLogger(CartController.class);
 	
